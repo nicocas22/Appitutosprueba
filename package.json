@@ -1,0 +1,38 @@
+{
+  "name": "appmenode",
+  "version": "1.0.0",
+  "description": "AppMe Aplicacion de Delivery & Tracking de productos",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "author": "Nicolas Esteban Castillo Soto",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.0",
+    "google-auth-library": "^7.0.3",
+    "html-to-text": "^7.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "juice": "^7.0.0",
+    "mongoose": "^5.12.2",
+    "multer": "^1.4.2",
+    "node-fetch": "^2.6.1",
+    "nodemailer": "^6.5.0",
+    "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
+    "pug": "^3.0.2",
+    "sequelize": "^6.6.2",
+    "shortid": "^2.2.16",
+    "socket.io": "^4.1.2",
+    "util": "^0.12.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
