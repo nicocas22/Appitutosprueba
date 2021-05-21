@@ -14,7 +14,7 @@ exports.crearTrabajo = async (req, res) => {
 
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
-        const url = `http://192.168.0.101:4000/public/images/${req.files[i].filename}`;
+        const url = `https://appitutosprueba.azurewebsites.net/public/images/${req.files[i].filename}`;
         galeriaURL.push(url);
       }
     }
