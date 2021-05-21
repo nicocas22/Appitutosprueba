@@ -57,7 +57,7 @@ const UsuariosSchema = mongoose.Schema({
 });
 
 UsuariosSchema.methods.setperfilURL = function setperfilURL(filename) {
-  this.perfilURL = `http://192.168.0.101:4000/public/${filename}`;
+  this.perfilURL = `https://appitutosprueba.azurewebsites.net/public/${filename}`;
 };
 
 module.exports = mongoose.model("Usuario", UsuariosSchema);
