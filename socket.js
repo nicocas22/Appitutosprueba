@@ -28,7 +28,7 @@ const socket = (app) => {
               }
             }
           }
-          io.emit("getAllUsers", users);
+          socket.emit("getAllUsers", users);
         }
       );
 
