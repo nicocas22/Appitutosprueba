@@ -33,30 +33,30 @@ const socket = (app) => {
       );
 
       loadMessages(socket);
+    });
+    // * Unique chat *//
+    socket.on("startUniqueChat", ({ recieverId, senderId }, callback) => {
+      addUser({ recieverId, senderId }, socket);
+    });
 
-      // * Unique chat *//
-      socket.on("startUniqueChat", ({ recieverId, senderId }, callback) => {
-        addUser({ recieverId, senderId }, socket);
-      });
+    socket.on("joinTwoUsers", ({ roomID }, cb) => {
+      socket.join(roomID);
+      cb({ roomID });
+    });
 
-      socket.on("joinTwoUsers", ({ roomID }, cb) => {
-        socket.join(roomID);
-        cb({ roomID });
+    socket.on("sendTouser", async (data) => {
+      const { roomID, senderId, recieverId, time, txtMsg } = data;
+      console.log("mensaje");
+      console.log(data);
+      const mensaje = await new Messages({
+        roomID,
+        senderId,
+        recieverId,
+        time,
+        txtMsg,
       });
-
-      socket.on("sendTouser", async (data) => {
-        socket.broadcast.to(data.roomID).emit("dispatchMsg", { ...data });
-        const { roomID, senderId, recieverId, time, txtMsg } = data;
-        console.log("guardando mensaje");
-        const mensaje = await new Messages({
-          roomID,
-          senderId,
-          recieverId,
-          time,
-          txtMsg,
-        });
-        mensaje.save();
-      });
+      await mensaje.save();
+      socket.broadcast.to(roomID).emit("dispatchMsg", mensaje);
     });
   });
 
