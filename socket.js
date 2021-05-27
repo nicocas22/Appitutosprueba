@@ -45,7 +45,7 @@ const socket = (app) => {
       });
 
       socket.on("sendTouser", async (data) => {
-        socket.to(data.roomID).emit("dispatchMsg", { ...data });
+        socket.broadcast.to(data.roomID).emit("dispatchMsg", { ...data });
         const { roomID, senderId, recieverId, time, txtMsg } = data;
         console.log("guardando mensaje");
         const mensaje = await new Messages({
