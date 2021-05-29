@@ -16,11 +16,9 @@ const addUser = ({ recieverId, senderId }, socket) => {
       },
     },
   ]).then((chat) => {
-    console.log("uno");
     if (chat.length > 0) {
       socket.emit("openChat", { ...chat[0] });
     } else {
-      console.log("dos");
       Chats.aggregate([
         {
           $match: {
@@ -29,7 +27,6 @@ const addUser = ({ recieverId, senderId }, socket) => {
           },
         },
       ]).then((lastAttempt) => {
-        console.log("tres");
         if (lastAttempt.length > 0) {
           socket.emit("openChat", { ...lastAttempt[0] });
         } else {
@@ -37,7 +34,7 @@ const addUser = ({ recieverId, senderId }, socket) => {
             ...user,
             roomID: uuidV4(),
           };
-          console.log("cuatro");
+
           socket.emit("openChat", newChat);
           // Create new Chat
           new Chats(newChat).save();
