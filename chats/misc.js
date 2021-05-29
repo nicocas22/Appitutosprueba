@@ -58,6 +58,6 @@ const loadMessages = (socket) => {
       return cb(msgs);
     });
   });
-};
+ };
 
 module.exports = { addUser, loadMessages };
