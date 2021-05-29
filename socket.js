@@ -97,7 +97,7 @@ const socket = (app) => {
       usuarioDesconectado(idusuario);
     });
   });
-
+ 
   return server;
 };
 
