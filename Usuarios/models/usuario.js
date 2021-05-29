@@ -1,63 +1,14 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const UsuariosSchema = mongoose.Schema({
-  nombres: {
-    type: String,
-    trim: true,
-  },
-  fechaNacimiento: {
-    type: Date,
-  },
-  rut: { type: String },
-  direccion: {},
-  email: {
-    type: String,
-    trim: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    trim: true,
-  },
-  telefono: {
-    type: String,
-  },
-  trabajos: [],
-  valoTrabajador: [
-    {
-      id: String,
-      idPostulacion: String,
-      idEmpleador: String,
-      nombre: String,
-      valoracion: Number,
-      desc: String,
-      creacion: { type: Date, default: Date.now() },
-    },
-  ],
-  valoEmpleador: [
-    {
-      id: String,
-      idPostulacion: String,
-      idTrabajador: String,
-      valoracion: Number,
-      desc: String,
-      creacion: { type: Date, default: Date.now() },
-    },
-  ],
-  intereses: [],
-  perfilURL: {
-    type: String,
-    trim: true,
-  },
-  favoritos: [],
-  activo: {
-    type: Number,
-    default: 0,
-  },
+const MessagesSchema = new Schema({
+  roomID: { type: String, required: true },
+  senderId: { type: String, required: true },
+  recieverId: { type: String, required: true },
+  txtMsg: { type: String, required: true },
+  visto: { type: Boolean, default: false },
+  time: { type: String, default: Date.now },
+  create: { type: Date, default: Date.now },
 });
 
-UsuariosSchema.methods.setperfilURL = function setperfilURL(filename) {
-  this.perfilURL = `https://appitutosprueba.azurewebsites.net/public/${filename}`;
-};
-
-module.exports = mongoose.model("Usuario", UsuariosSchema);
+module.exports = Messages = mongoose.model("messages", MessagesSchema);
