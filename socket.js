@@ -8,7 +8,23 @@ const socket = (app) => {
   const server = http.createServer(app);
   const io = socketIo(server);
 
+  const usuarioConectado = async (_id) => {
+    const usuario = await Usuarios.findById(_id);
+    usuario.online = true;
+    await usuario.save();
+  };
+  const usuarioDesconectado = async (_id) => {
+    const usuario = await Usuarios.findById(_id);
+    usuario.online = false;
+    usuario.ultimaConexion = new Date();
+    await usuario.save();
+  };
   io.on("connection", function (socket) {
+    console.log("conectado");
+    let idusuario = socket.handshake.query.idusuario;
+    if (idusuario) {
+      usuarioConectado(idusuario);
+    }
     socket.on("getUsers", (idUser) => {
       Chats.find(
         { $or: [{ recieverId: idUser }, { senderId: idUser }] },
@@ -18,16 +34,18 @@ const socket = (app) => {
           if (roomChats[0]) {
             for (let i = 0; i < roomChats.length; i++) {
               let user1 = await Usuarios.findById(roomChats[i].recieverId);
+
               if (user1?._id != idUser) {
-                users.push(user1);
+                users.push({ ...user1._doc, roomID: roomChats[i].roomID });
               }
 
               let user2 = await Usuarios.findById(roomChats[i].senderId);
               if (user2?._id != idUser) {
-                users.push(user2);
+                users.push({ ...user2._doc, roomID: roomChats[i].roomID });
               }
             }
           }
+
           socket.emit("getAllUsers", users);
         }
       );
@@ -46,8 +64,7 @@ const socket = (app) => {
 
     socket.on("sendTouser", async (data) => {
       const { roomID, senderId, recieverId, time, txtMsg } = data;
-      console.log("mensaje");
-      console.log(data);
+
       const mensaje = await new Messages({
         roomID,
         senderId,
@@ -57,6 +74,27 @@ const socket = (app) => {
       });
       await mensaje.save();
       socket.broadcast.to(roomID).emit("dispatchMsg", mensaje);
+    });
+
+    socket.on("updateViewMsgs", async (data, cb) => {
+      const mensajes = await Messages.find({
+        recieverId: data.recieverId,
+        roomID: data.roomID,
+        visto: false,
+      });
+      await Messages.updateMany(
+        {
+          recieverId: data.recieverId,
+          roomID: data.roomID,
+          visto: false,
+        },
+        { $set: { visto: true } }
+      );
+
+      cb(mensajes);
+    });
+    socket.on("disconnect", async () => {
+      usuarioDesconectado(idusuario);
     });
   });
 
